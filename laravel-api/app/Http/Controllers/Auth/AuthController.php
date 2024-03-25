@@ -1,11 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
+use App\Services\Auth\AuthService;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class AuthController extends Controller
 {
+    protected $authService;
+    public function __construct(AuthService $authService)
+    {
+        return $this->authService = $authService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -22,8 +30,12 @@ class UserController extends Controller
         //
     }
 
+    /**
+     * Handle login.
+     */
     public function login(Request $request)
     {
+        return $this->authService->login($request);
     }
 
     /**
@@ -31,7 +43,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $this->authService->create($request);
     }
 
     /**

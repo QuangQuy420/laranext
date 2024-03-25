@@ -18,7 +18,7 @@ abstract class BaseService
         return $this->model->findOrFail($id);
     }
 
-    public function create(array $data)
+    public function create(object $data)
     {
         return $this->model->create($data);
     }
@@ -49,7 +49,7 @@ abstract class BaseService
         return $this->model;
     }
 
-    protected function formatInputData(array &$inputs): void
+    protected function formatInputData(object &$inputs): void
     {
         // Format data here
     }

@@ -13,13 +13,17 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): Response
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return response()->noContent();
+        /** @var \App\Models\User $user **/
+        $user = Auth::user();
+        $token = $user->createToken('myToken')->plainTextToken;
+
+        return response()->json(['user' => $user, 'token' => $token]);
     }
 
     /**
@@ -27,11 +31,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): Response
     {
-        Auth::guard('web')->logout();
+        // Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        /** @var \App\Models\User $user **/
+        $user = Auth::user();
+        $user->currentAccessToken()->delete();
 
         return response()->noContent();
     }
